@@ -28,6 +28,22 @@ app.get("/pokemon/:id", (request, response) => {
 });
 
 // 3.0 A GET /search route, where the user can search Pokemons by name or type (when searching by type, should return all the pokemon found with that type)
+app.get("/search", (request, response) => {
+  if (Object.keys(request.query)[0] === "name") {
+    const foundedPokemon = allPokemon.filter(currentPokemon => {
+      return currentPokemon.name.includes(request.query.name);
+    });
+    return response.status(200).json(foundedPokemon);
+  } else if (Object.keys(request.query)[0] === "types") {
+    const foundedPokemon = allPokemon.filter(currentPokemon => {
+      return currentPokemon.types.includes(request.query.types);
+    });
+
+    return response.status(200).json(foundedPokemon);
+  }
+
+  return response.status(400).json({ msg: "Mande a query direito, fdp!" });
+});
 
 // 4.0 A POST /pokemon route, that inserts the new Pokemon into the existing list of all Pokemons (don't worry about persisting the data to the disk, we're gonan learn that later)
 app.post("/addPokemon", (request, response) => {
